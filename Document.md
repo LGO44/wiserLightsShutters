@@ -1,22 +1,16 @@
-# wiserLightsShutters
+#wiserLightsShutters
   Developpment of lights and shutters for the wiserHomeAssistantPlatform
 
 Developped by LGO44
-based on 
+based on  the wiserHomeAssistantPlatform
 climate.py for light.py and cover.py 
 
+For the heatingactuators, I have alos added two sensors for the energy management in the sensor.py
 
-## v3.0 New Features
 
-- heatingactuators: 
-    I have alos added to sensor for the energy management in the sensor.py
-
-- lights and shutters:
-	For light and shutters I can use all the attributes provided by the wiserHeatAPIv2.
-
+For light and shutters I can use all the attributes provided by the wiserHeatAPIv2.
 Some attributes are not provided by this API:
- 
-### in the file light.py from the wiserHeatAPIv2 I propose to add the properties: 
+ in the file light.py from the wiserHeatAPIv2 I propose to add the properties: 
 
 @Property
 def schedule_id(self):
@@ -59,7 +53,7 @@ def override_level(self) -> int:
     return self._device_type_data.get("OverrideLevel", 0) 
 	
 	
-###  For the shutters in the shutter.py I propose:
+For the shutters in the shutter.py I propose:
 
 @property
 def schedule_id(self):
@@ -70,4 +64,7 @@ def schedule_id(self):
 def target_lift(self) -> int:
     """Get the light target lift"""
     return self._device_type_data.get("TargetLift", 0)	
+
+
+The are not operationnal.
 	

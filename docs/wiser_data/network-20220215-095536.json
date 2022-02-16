@@ -1,0 +1,78 @@
+{
+  "AccessPoint": {
+    "Enabled": false,
+    "Channel": 2,
+    "SecurityMode": "Open",
+    "MacAddress": "ANON_MAC",
+    "NetworkInterface": {
+      "InterfaceName": "wlan1",
+      "HostName": "WiserHeatXXXXXX",
+      "DhcpMode": "Server",
+      "IPv4HostAddress": "ANON_IP",
+      "IPv4SubnetMask": "255.255.255.0",
+      "IPv4DefaultGateway": "ANON_IP",
+      "IPv4PrimaryDNS": "ANON_IP",
+      "IPv4SecondaryDNS": "ANON_IP"
+    }
+  },
+  "Station": {
+    "Enabled": true,
+    "SSID": "ANON_SSID",
+    "SecurityMode": "WPA_WPA2_PSK",
+    "ScanSlotTime": 20,
+    "ScanSlots": 2,
+    "NetworkInterface": {
+      "InterfaceName": "wlan0",
+      "HostName": "WiserHeatXXXXXX",
+      "DhcpMode": "Client"
+    },
+    "ConnectionStatus": "Connected",
+    "DhcpStatus": {
+      "Status": "BOUND",
+      "LeaseStartTime": 795946510,
+      "LeaseTime": 20864,
+      "IPv4Address": "ANON_IP",
+      "IPv4SubnetMask": "255.255.255.0",
+      "IPv4DefaultGateway": "ANON_IP",
+      "IPv4PrimaryDNS": "ANON_IP",
+      "IPv4SecondaryDNS": "ANON_IP"
+    },
+    "Scanning": false,
+    "DetectedAccessPoints": [
+      {
+        "SSID": "ANON_SSID",
+        "Channel": 11,
+        "SecurityMode": "WPA_WPA2_PSK",
+        "RSSI": -66
+      },
+      {
+        "SSID": "ANON_SSID",
+        "Channel": 5,
+        "SecurityMode": "WPA_WPA2_PSK",
+        "RSSI": -69
+      },
+      {
+        "SSID": "ANON_SSID",
+        "Channel": 2,
+        "SecurityMode": "Open",
+        "RSSI": -90
+      }
+    ],
+    "ConnectionFailures": 0,
+    "MdnsHostname": "WiserHeatXXXXXX",
+    "MacAddress": "ANON_MAC",
+    "RSSI": {
+      "Current": -72,
+      "Min": -88,
+      "Max": -61
+    },
+    "Channel": 255
+  },
+  "TcpStats_SinceBoot": {
+    "TimeLastUpdated": 1644915240,
+    "SegmentsSent_Count": 1683677,
+    "SegmentRetransmissions_Count": 7382,
+    "SocketTimeouts_Count": 0,
+    "StackRespawns_Count": 3
+  }
+}

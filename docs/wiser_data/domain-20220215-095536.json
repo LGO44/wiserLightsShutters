@@ -1,0 +1,677 @@
+{
+  "System": {
+    "PairingStatus": "Paired",
+    "TimeZoneOffset": 60,
+    "AutomaticDaylightSaving": false,
+    "SystemMode": "Heat",
+    "FotaEnabled": true,
+    "ValveProtectionEnabled": false,
+    "EcoModeEnabled": true,
+    "AwayModeAffectsHotWater": false,
+    "AwayModeSetPointLimit": 160,
+    "BoilerSettings": {
+      "ControlType": "HeatSourceType_RelayControlled",
+      "FuelType": "Gas",
+      "CycleRate": "CPH_6",
+      "OnOffHysteresis": 5
+    },
+    "CoolingModeDefaultSetpoint": 210,
+    "CoolingAwayModeSetpointLimit": -200,
+    "ComfortModeEnabled": false,
+    "PreheatTimeLimit": 10800,
+    "DegradedModeSetpointThreshold": 180,
+    "GeoPosition": {
+      "Latitude": 30.4865,
+      "Longitude": 58.4892
+    },
+    "UfhOrphanModeOutput": "On",
+    "UnixTime": 1644915300,
+    "ActiveSystemVersion": "3.8.8-775b807286",
+    "BrandName": "WiserHeat",
+    "CloudConnectionStatus": "Connected",
+    "LocalDateAndTime": {
+      "Year": 2022,
+      "Month": "February",
+      "Date": 15,
+      "Day": "Tuesday",
+      "Time": 955
+    },
+    "HeatingButtonOverrideState": "Off",
+    "HotWaterButtonOverrideState": "Off",
+    "OpenThermConnectionStatus": "Disconnected",
+    "SunriseTimes": [
+      822,
+      820,
+      819,
+      817,
+      816,
+      814,
+      813,
+      811,
+      809,
+      808,
+      806,
+      804,
+      802
+    ],
+    "SunsetTimes": [
+      1821,
+      1822,
+      1824,
+      1825,
+      1827,
+      1829,
+      1830,
+      1832,
+      1833,
+      1835,
+      1836,
+      1838,
+      1839
+    ],
+    "isTrialist": false,
+    "isProvisioned": true,
+    "HardwareGeneration": 1
+  },
+  "Cloud": {
+    "DetailedPublishing": false,
+    "WiserApiHost": "api-nl.wiserair.com",
+    "BootStrapApiHost": "bootstrap.gl.struxurewarecloud.com"
+  },
+  "HeatingChannel": [
+    {
+      "id": 1,
+      "Name": "Channel-1",
+      "RoomIds": [],
+      "PercentageDemand": 0,
+      "DemandOnOffOutput": "Off",
+      "HeatingRelayState": "Off",
+      "IsSmartValvePreventingDemand": false,
+      "DemandIsAsynchronous": true
+    }
+  ],
+  "Room": [
+    {
+      "id": 1,
+      "ManualSetPoint": 150,
+      "ScheduleId": 1,
+      "ComfortModeScore": 28915,
+      "HeatingRate": 6451,
+      "RoomStatId": 1,
+      "HeatingActuatorIds": [
+        6
+      ],
+      "Name": "Salle_Salon",
+      "Mode": "Auto",
+      "DemandType": "Modulating",
+      "WindowDetectionActive": true,
+      "CalculatedTemperature": 186,
+      "CurrentSetPoint": 190,
+      "PercentageDemand": 100,
+      "ControlOutputState": "On",
+      "SetpointOrigin": "FromSchedule",
+      "DisplayedSetPoint": 190,
+      "ScheduledSetPoint": 190,
+      "AwayModeSuppressed": false,
+      "RoundedAlexaTemperature": 185,
+      "EffectiveMode": "Auto",
+      "PercentageDemandForItrv": 100,
+      "ControlDirection": "Heat",
+      "HeatingType": "ElectricRadiator"
+    },
+    {
+      "id": 2,
+      "ScheduleId": 1,
+      "HeatingRate": 1200,
+      "HeatingActuatorIds": [
+        12
+      ],
+      "Name": "Cuisine",
+      "Mode": "Manual",
+      "WindowDetectionActive": true,
+      "CalculatedTemperature": -32768,
+      "CurrentSetPoint": -200,
+      "SetpointOrigin": "FromNoControl",
+      "DisplayedSetPoint": -200,
+      "ScheduledSetPoint": 190,
+      "Invalid": "NoTemperatureInput",
+      "EffectiveMode": "Manual",
+      "ControlDirection": "None",
+      "HeatingType": "ElectricRadiator"
+    },
+    {
+      "id": 3,
+      "HeatingRate": 1200,
+      "Name": "Grande chambre",
+      "Mode": "Manual",
+      "WindowDetectionActive": false,
+      "CalculatedTemperature": -32768,
+      "CurrentSetPoint": -200,
+      "SetpointOrigin": "FromNoControl",
+      "DisplayedSetPoint": -200,
+      "Invalid": "NothingAssigned",
+      "EffectiveMode": "Manual",
+      "ControlDirection": "None"
+    }
+  ],
+  "Device": [
+    {
+      "id": 0,
+      "NodeId": 0,
+      "ProductType": "Controller",
+      "ProductIdentifier": "Controller",
+      "ActiveFirmwareVersion": "3.8.8",
+      "ModelIdentifier": "WT704R1A30S4",
+      "DeviceLockEnabled": false,
+      "DisplayedSignalStrength": "Medium",
+      "ReceptionOfController": {
+        "Rssi": -72
+      },
+      "PendingZigbeeMessageMask": 1,
+      "BindingsStatus": "Unchecked",
+      "ReportConfigStatus": "Unchecked"
+    },
+    {
+      "id": 1,
+      "NodeId": 60677,
+      "ProductType": "RoomStat",
+      "ProductIdentifier": "RoomStat",
+      "ActiveFirmwareVersion": "0000a412",
+      "ModelIdentifier": "Thermostat",
+      "SerialNumber": "ANON_SERIAL",
+      "ProductModel": "Thermostat",
+      "OtaImageQueryCount": 0,
+      "LastOtaImageQueryCount": 0,
+      "ParentNodeId": 51606,
+      "OtaVersion": 42002,
+      "OtaHardwareVersion": 1,
+      "DeviceLockEnabled": false,
+      "DisplayedSignalStrength": "Good",
+      "BatteryVoltage": 28,
+      "BatteryLevel": "Normal",
+      "ReceptionOfController": {
+        "Rssi": -61,
+        "Lqi": 156
+      },
+      "ReceptionOfDevice": {
+        "Rssi": -62,
+        "Lqi": 152
+      },
+      "BindingsStatus": "SetCorrectly",
+      "ReportConfigStatus": "SetCorrectly"
+    },
+    {
+      "id": 11,
+      "NodeId": 64580,
+      "ProductType": "SmartPlug",
+      "ProductIdentifier": "HeimanSmartplug",
+      "ActiveFirmwareVersion": "00000011",
+      "ModelIdentifier": "SmartPlug",
+      "SerialNumber": "ANON_SERIAL",
+      "ProductModel": "",
+      "OtaImageQueryCount": 0,
+      "LastOtaImageQueryCount": 0,
+      "OtaVersion": 17,
+      "DeviceLockEnabled": false,
+      "DisplayedSignalStrength": "Online",
+      "ReceptionOfDevice": {
+        "Rssi": -71,
+        "Lqi": 116
+      },
+      "BindingsStatus": "SetCorrectly",
+      "ReportConfigStatus": "SetCorrectly"
+    },
+    {
+      "id": 5,
+      "NodeId": 43801,
+      "ProductType": "DimmableLight",
+      "ProductIdentifier": "NHPushButtonDimmer",
+      "ActiveFirmwareVersion": "020519ff",
+      "ModelIdentifier": "Unknown",
+      "SerialNumber": "ANON_SERIAL",
+      "ProductModel": "NHPB/DIMMER/1",
+      "OtaImageQueryCount": 0,
+      "LastOtaImageQueryCount": 0,
+      "OtaVersion": 33888767,
+      "OtaHardwareVersion": 0,
+      "DeviceLockEnabled": false,
+      "DisplayedSignalStrength": "VeryGood",
+      "IdentifyActive": false,
+      "ReceptionOfController": {
+        "Rssi": -49,
+        "Lqi": 204
+      },
+      "ReceptionOfDevice": {
+        "Rssi": -61,
+        "Lqi": 156
+      },
+      "PendingZigbeeMessageMask": 0,
+      "BindingsStatus": "SetCorrectly",
+      "ReportConfigStatus": "SetCorrectly"
+    },
+    {
+      "id": 4,
+      "NodeId": 4919,
+      "ProductType": "Shutter",
+      "ProductIdentifier": "NHPushButtonShutter",
+      "ActiveFirmwareVersion": "020519ff",
+      "ModelIdentifier": "Unknown",
+      "SerialNumber": "ANON_SERIAL",
+      "ProductModel": "NHPB/SHUTTER/1",
+      "OtaImageQueryCount": 0,
+      "LastOtaImageQueryCount": 1,
+      "OtaVersion": 33888767,
+      "OtaHardwareVersion": 0,
+      "DeviceLockEnabled": false,
+      "DisplayedSignalStrength": "Good",
+      "ReceptionOfController": {
+        "Rssi": -66,
+        "Lqi": 136
+      },
+      "ReceptionOfDevice": {
+        "Rssi": -46,
+        "Lqi": 216
+      },
+      "BindingsStatus": "SetCorrectly",
+      "ReportConfigStatus": "SetCorrectly"
+    },
+    {
+      "id": 6,
+      "NodeId": 243,
+      "ProductType": "HeatingActuator",
+      "ProductIdentifier": "LoadController",
+      "ActiveFirmwareVersion": "01000000",
+      "ModelIdentifier": "CCTFR6700",
+      "SerialNumber": "ANON_SERIAL",
+      "ProductModel": "",
+      "OtaImageQueryCount": 0,
+      "LastOtaImageQueryCount": 1,
+      "OtaVersion": 16777216,
+      "OtaHardwareVersion": 1,
+      "DeviceLockEnabled": false,
+      "DisplayedSignalStrength": "Online",
+      "ReceptionOfDevice": {
+        "Rssi": -61,
+        "Lqi": 156
+      },
+      "BindingsStatus": "SetCorrectly",
+      "ReportConfigStatus": "SetCorrectly"
+    },
+    {
+      "id": 7,
+      "NodeId": 27577,
+      "ProductType": "Shutter",
+      "ProductIdentifier": "NHPushButtonShutter",
+      "ActiveFirmwareVersion": "020519ff",
+      "ModelIdentifier": "Unknown",
+      "SerialNumber": "ANON_SERIAL",
+      "ProductModel": "",
+      "OtaImageQueryCount": 0,
+      "LastOtaImageQueryCount": 1,
+      "OtaVersion": 33888767,
+      "OtaHardwareVersion": 0,
+      "DeviceLockEnabled": false,
+      "DisplayedSignalStrength": "VeryGood",
+      "IdentifyActive": false,
+      "ReceptionOfController": {
+        "Rssi": -37,
+        "Lqi": 252
+      },
+      "ReceptionOfDevice": {
+        "Rssi": -46,
+        "Lqi": 216
+      },
+      "PendingZigbeeMessageMask": 0,
+      "BindingsStatus": "SetCorrectly",
+      "ReportConfigStatus": "SetCorrectly"
+    },
+    {
+      "id": 8,
+      "NodeId": 53492,
+      "ProductType": "Shutter",
+      "ProductIdentifier": "NHPushButtonShutter",
+      "ActiveFirmwareVersion": "020519ff",
+      "ModelIdentifier": "Unknown",
+      "SerialNumber": "ANON_SERIAL",
+      "ProductModel": "NHPB/SHUTTER/1",
+      "OtaImageQueryCount": 0,
+      "LastOtaImageQueryCount": 1,
+      "OtaVersion": 33888767,
+      "OtaHardwareVersion": 0,
+      "DeviceLockEnabled": false,
+      "DisplayedSignalStrength": "VeryGood",
+      "ReceptionOfController": {
+        "Rssi": -54,
+        "Lqi": 184
+      },
+      "ReceptionOfDevice": {
+        "Rssi": -67,
+        "Lqi": 132
+      },
+      "BindingsStatus": "SetCorrectly",
+      "ReportConfigStatus": "SetCorrectly"
+    },
+    {
+      "id": 9,
+      "NodeId": 51606,
+      "ProductType": "Shutter",
+      "ProductIdentifier": "NHPushButtonShutter",
+      "ActiveFirmwareVersion": "020519ff",
+      "ModelIdentifier": "Unknown",
+      "SerialNumber": "ANON_SERIAL",
+      "ProductModel": "",
+      "OtaImageQueryCount": 0,
+      "LastOtaImageQueryCount": 1,
+      "OtaVersion": 33888767,
+      "OtaHardwareVersion": 0,
+      "DeviceLockEnabled": false,
+      "DisplayedSignalStrength": "VeryGood",
+      "ReceptionOfController": {
+        "Rssi": -59,
+        "Lqi": 164
+      },
+      "ReceptionOfDevice": {
+        "Rssi": -62,
+        "Lqi": 152
+      },
+      "BindingsStatus": "SetCorrectly",
+      "ReportConfigStatus": "SetCorrectly"
+    },
+    {
+      "id": 10,
+      "NodeId": 18854,
+      "ProductType": "Shutter",
+      "ProductIdentifier": "NHPushButtonShutter",
+      "ActiveFirmwareVersion": "020519ff",
+      "ModelIdentifier": "Unknown",
+      "SerialNumber": "ANON_SERIAL",
+      "ProductModel": "NHPB/SHUTTER/1",
+      "OtaImageQueryCount": 0,
+      "LastOtaImageQueryCount": 1,
+      "OtaVersion": 33888767,
+      "OtaHardwareVersion": 0,
+      "DeviceLockEnabled": false,
+      "DisplayedSignalStrength": "VeryGood",
+      "ReceptionOfController": {
+        "Rssi": -36,
+        "Lqi": 255
+      },
+      "ReceptionOfDevice": {
+        "Rssi": -46,
+        "Lqi": 216
+      },
+      "BindingsStatus": "SetCorrectly",
+      "ReportConfigStatus": "SetCorrectly"
+    },
+    {
+      "id": 12,
+      "NodeId": 48200,
+      "ProductType": "HeatingActuator",
+      "ProductIdentifier": "LoadController",
+      "ActiveFirmwareVersion": "01000000",
+      "ModelIdentifier": "CCTFR6700",
+      "SerialNumber": "ANON_SERIAL",
+      "ProductModel": "16 Amp Relay",
+      "OtaImageQueryCount": 0,
+      "LastOtaImageQueryCount": 0,
+      "OtaVersion": 16777216,
+      "OtaHardwareVersion": 1,
+      "DeviceLockEnabled": true,
+      "DisplayedSignalStrength": "Online",
+      "IdentifyActive": false,
+      "ReceptionOfDevice": {
+        "Rssi": -60,
+        "Lqi": 160
+      },
+      "PendingZigbeeMessageMask": 0,
+      "BindingsStatus": "SetCorrectly",
+      "ReportConfigStatus": "SetCorrectly"
+    }
+  ],
+  "Zigbee": {
+    "JPANCount": 3,
+    "NetworkChannel": 25,
+    "UpdateEBLState": "Successful",
+    "CurrentEBLFile": "CICIE-1.2.0-3d1043a1.ebl",
+    "TargetEBLFile": "CICIE-1.2.0-3d1043a1.ebl",
+    "UpdateAttempts": 1,
+    "ZigbeeModuleVersion": "1.2.0-3d1043a1",
+    "ZigbeeEUI": "842E14FFFE5FEE6B"
+  },
+  "UpgradeInfo": [
+    {
+      "id": 1,
+      "FirmwareFilename": "105E-0E00-01000000-0000-00FF.zigbee"
+    },
+    {
+      "id": 2,
+      "FirmwareFilename": "105E-0201-0000DAC0-0000-0000.zigbee"
+    },
+    {
+      "id": 3,
+      "FirmwareFilename": "105E-04E1-0000A412-0000-0009.zigbee"
+    },
+    {
+      "id": 4,
+      "FirmwareFilename": "105E-05E1-00000017-0000-0009.zigbee"
+    },
+    {
+      "id": 5,
+      "FirmwareFilename": "105E-0A00-00007D01-0000-0000.zigbee"
+    },
+    {
+      "id": 6,
+      "FirmwareFilename": "105E-000B-020519FF-0100-01FF.zigbee"
+    },
+    {
+      "id": 7,
+      "FirmwareFilename": "105E-000D-020519FF-0000-01FF.zigbee"
+    },
+    {
+      "id": 8,
+      "FirmwareFilename": "105E-0010-020519FF-0000-01FF.zigbee"
+    },
+    {
+      "id": 9,
+      "FirmwareFilename": "105E-0011-020519FF-0000-01FF.zigbee"
+    },
+    {
+      "id": 10,
+      "FirmwareFilename": "105E-0012-020519FF-0000-01FF.zigbee"
+    },
+    {
+      "id": 11,
+      "FirmwareFilename": "105E-0013-020519FF-0000-01FF.zigbee"
+    }
+  ],
+  "RoomStat": [
+    {
+      "id": 1,
+      "SetPoint": 190,
+      "MeasuredTemperature": 186,
+      "MeasuredHumidity": 56
+    }
+  ],
+  "SmartPlug": [
+    {
+      "id": 11,
+      "ManualState": "On",
+      "Name": "TV",
+      "Mode": "Manual",
+      "AwayAction": "Off",
+      "RoomId": 1,
+      "OutputState": "On",
+      "ControlSource": "FromManualMode",
+      "CurrentSummationDelivered": 74256,
+      "InstantaneousDemand": 29,
+      "TargetState": "On"
+    }
+  ],
+  "HeatingActuator": [
+    {
+      "id": 6,
+      "OutputType": "Relay",
+      "MeasuredTemperature": 186,
+      "OccupiedHeatingSetPoint": 190,
+      "CurrentSummationDelivered": 645,
+      "InstantaneousDemand": 0
+    },
+    {
+      "id": 12,
+      "OutputType": "Relay",
+      "MeasuredTemperature": -32768,
+      "OccupiedHeatingSetPoint": 40,
+      "CurrentSummationDelivered": 4,
+      "InstantaneousDemand": 0
+    }
+  ],
+  "Light": [
+    {
+      "id": 1,
+      "DeviceId": 5,
+      "Endpoint": 3,
+      "IsDimmable": true,
+      "ManualLevel": -76,
+      "OutputRange": {
+        "Minimum": 1,
+        "Maximum": 254
+      },
+      "Name": "Lustre",
+      "ScheduleId": 2,
+      "RoomId": 2,
+      "Mode": "Manual",
+      "AwayAction": "NoChange",
+      "CurrentState": "Off",
+      "CurrentPercentage": 30,
+      "CurrentLevel": 76,
+      "ControlSource": "FromManualMode",
+      "ScheduledPercentage": 0,
+      "TargetState": "Off",
+      "TargetPercentage": 30
+    }
+  ],
+  "Shutter": [
+    {
+      "id": 1,
+      "DeviceId": 4,
+      "Endpoint": 5,
+      "ManualLift": 100,
+      "DriveConfig": {
+        "LiftOpenTime": 200,
+        "LiftCloseTime": 200
+      },
+      "Name": "Volet",
+      "ScheduleId": 1,
+      "RoomId": 3,
+      "Mode": "Auto",
+      "AwayAction": "Close",
+      "CurrentLift": 100,
+      "ControlSource": "FromSchedule",
+      "ScheduledLift": 100,
+      "TargetLift": 100,
+      "LiftMovement": "Stopped"
+    },
+    {
+      "id": 2,
+      "DeviceId": 7,
+      "Endpoint": 5,
+      "ManualLift": 100,
+      "DriveConfig": {
+        "LiftOpenTime": 240,
+        "LiftCloseTime": 240
+      },
+      "Name": "Jardin",
+      "RoomId": 1,
+      "Mode": "Manual",
+      "AwayAction": "Close",
+      "CurrentLift": 100,
+      "ControlSource": "FromManualMode",
+      "TargetLift": 100,
+      "LiftMovement": "Stopped"
+    },
+    {
+      "id": 3,
+      "DeviceId": 8,
+      "Endpoint": 5,
+      "ManualLift": 100,
+      "DriveConfig": {
+        "LiftOpenTime": 240,
+        "LiftCloseTime": 240
+      },
+      "Name": "Terrasse ",
+      "RoomId": 1,
+      "Mode": "Manual",
+      "AwayAction": "Close",
+      "CurrentLift": 100,
+      "ControlSource": "FromManualMode",
+      "TargetLift": 100,
+      "LiftMovement": "Stopped"
+    },
+    {
+      "id": 4,
+      "DeviceId": 9,
+      "Endpoint": 5,
+      "ManualLift": 100,
+      "DriveConfig": {
+        "LiftOpenTime": 240,
+        "LiftCloseTime": 240
+      },
+      "Name": "Devant",
+      "RoomId": 1,
+      "Mode": "Manual",
+      "AwayAction": "NoChange",
+      "CurrentLift": 100,
+      "ControlSource": "FromManualMode",
+      "TargetLift": 100,
+      "LiftMovement": "Stopped"
+    },
+    {
+      "id": 5,
+      "DeviceId": 10,
+      "Endpoint": 5,
+      "ManualLift": 100,
+      "DriveConfig": {
+        "LiftOpenTime": 240,
+        "LiftCloseTime": 240
+      },
+      "Name": "Sauzeraie ",
+      "RoomId": 1,
+      "Mode": "Manual",
+      "AwayAction": "Close",
+      "CurrentLift": 100,
+      "ControlSource": "FromManualMode",
+      "TargetLift": 100,
+      "LiftMovement": "Stopped"
+    }
+  ],
+  "Moment": [
+    {
+      "id": 1,
+      "Name": "Sejour fermeture ",
+      "IconId": 32
+    },
+    {
+      "id": 2,
+      "Name": "Sejour ouverture",
+      "IconId": 33
+    },
+    {
+      "id": 3,
+      "Name": "Hors+gel",
+      "IconId": 23
+    }
+  ],
+  "DeviceCapabilityMatrix": {
+    "Roomstat": true,
+    "ITRV": true,
+    "SmartPlug": true,
+    "UFH": true,
+    "UFHFloorTempSensor": true,
+    "UFHDewSensor": true,
+    "HACT": false,
+    "LACT": false,
+    "Light": true,
+    "Shutter": true,
+    "LoadController": true
+  }
+}
