@@ -43,10 +43,28 @@ def get_device_name(data, id, type = "device"):
 
         if device.product_type == "SmartPlug":
             return f"{ENTITY_PREFIX} {device.name}"
-
+        """
         if device.product_type in ["Shutter", "DimmableLight"]:
             return f"{ENTITY_PREFIX} {device.product_type} {device.name}"
-
+        """
+        
+        if device.product_type == "Shutter":
+            device_room = data.wiserhub.rooms.get_by_device_id(id)
+            # If device not allocated to a room return type and id only
+            if device_room:
+                device_room = data.wiserhub.rooms.get_by_device_id(id)                             
+                return f"{ENTITY_PREFIX} {device.product_type} {device_room.name} {device.name}"
+            return f"{ENTITY_PREFIX} {device.product_type} {device.name}"
+            
+        if device.product_type in ["Light", "DimmableLight"]:
+            device_room = data.wiserhub.rooms.get_by_device_id(id)
+             # If device not allocated to a room return type and id only
+            if device_room:
+                device_room = data.wiserhub.rooms.get_by_device_id(id)
+                return f"{ENTITY_PREFIX} {device.product_type} {device_room.name} {device.name}"
+            return f"{ENTITY_PREFIX} {device.product_type} {device.name}"    
+        
+        
         return f"{ENTITY_PREFIX} {device.serial_number}"
 
     elif type == "room":

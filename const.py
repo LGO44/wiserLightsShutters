@@ -9,7 +9,7 @@ DOMAIN = "wiser"
 DATA_WISER_CONFIG = "wiser_config"
 
 VERSION = "3.0.21"
-WISER_PLATFORMS = ["climate", "sensor", "switch", "select", "button", "number"]
+WISER_PLATFORMS = ["climate", "sensor", "switch", "select", "button", "number", "light", "cover"]
 DATA = "data"
 UPDATE_TRACK = "update_track"
 UPDATE_LISTENER = "update_listener"
@@ -26,7 +26,7 @@ NOTIFICATION_TITLE = "Wiser Component Setup"
 # Default Values
 DEFAULT_BOOST_TEMP = 2
 DEFAULT_BOOST_TEMP_TIME = 60
-DEFAULT_SCAN_INTERVAL = 30
+DEFAULT_SCAN_INTERVAL = 15
 DEFAULT_SETPOINT_MODE = "normal"
 
 # Setpoint Modes
@@ -64,7 +64,14 @@ WISER_SERVICES = {
     "SERVICE_SET_HEATING_SCHEDULE": "set_heating_schedule",
     "SERVICE_SET_ONOFF_SCHEDULE": "set_onoff_schedule",
     "SERVICE_SET_SMARTPLUG_MODE": "set_smartplug_mode",
-    "SERVICE_SET_HOTWATER_MODE": "set_hotwater_mode",  
+    "SERVICE_SET_HOTWATER_MODE": "set_hotwater_mode", 
+    "SERVICE_GET_LIGHT_SCHEDULE": "get_light_schedule",
+    "SERVICE_SET_LIGHT_SCHEDULE": "set_light_schedule",
+    "SERVICE_COPY_LIGHT_SCHEDULE": "copy_light_schedule",
+    "SERVICE_GET_SHUTTER_SCHEDULE": "get_shutter_schedule",
+    "SERVICE_SET_SHUTTER_SCHEDULE": "set_light_schedule",
+    "SERVICE_COPY_SHUTTER_SCHEDULE": "copy_shutter_schedule",
+
 }
 
 WISER_BOOST_PRESETS = {
