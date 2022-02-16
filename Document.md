@@ -12,10 +12,10 @@ For light and shutters I can use all the attributes provided by the wiserHeatAPI
 Some attributes are not provided by this API:
  in the file light.py from the wiserHeatAPIv2 I propose to add the properties: 
 
-@Property
+@property
 def schedule_id(self):
-"""Get the schedule id of the light"""
-return self._device_type_data.get("ScheduleId", 0) 
+    """Get the schedule id of the light"""
+    return self._device_type_data.get("ScheduleId", 0) 
  
 @property
 def manual_level(self):
