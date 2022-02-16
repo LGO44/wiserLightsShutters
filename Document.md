@@ -66,5 +66,5 @@ def target_lift(self) -> int:
     return self._device_type_data.get("TargetLift", 0)	
 
 
-The are not operationnal.
+The commands are not operationnal.
 	
