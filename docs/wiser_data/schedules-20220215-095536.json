@@ -1,0 +1,333 @@
+{
+  "Heating": [
+    {
+      "id": 1,
+      "Name": "Sejour",
+      "Monday": {
+        "Time": [
+          700,
+          1000,
+          1600,
+          2300
+        ],
+        "DegreesC": [
+          190,
+          150,
+          195,
+          150
+        ]
+      },
+      "Tuesday": {
+        "Time": [
+          700,
+          1000,
+          1600,
+          2300
+        ],
+        "DegreesC": [
+          190,
+          150,
+          195,
+          150
+        ]
+      },
+      "Wednesday": {
+        "Time": [
+          700,
+          1000,
+          1600,
+          2300
+        ],
+        "DegreesC": [
+          190,
+          150,
+          195,
+          150
+        ]
+      },
+      "Thursday": {
+        "Time": [
+          700,
+          1000,
+          1600,
+          2300
+        ],
+        "DegreesC": [
+          190,
+          150,
+          195,
+          150
+        ]
+      },
+      "Friday": {
+        "Time": [
+          700,
+          1000,
+          1600,
+          2300
+        ],
+        "DegreesC": [
+          190,
+          150,
+          195,
+          150
+        ]
+      },
+      "Saturday": {
+        "Time": [
+          700,
+          1000,
+          1600,
+          2300
+        ],
+        "DegreesC": [
+          190,
+          150,
+          195,
+          150
+        ]
+      },
+      "Sunday": {
+        "Time": [
+          700,
+          1000,
+          1600,
+          2300
+        ],
+        "DegreesC": [
+          190,
+          150,
+          195,
+          150
+        ]
+      },
+      "CurrentSetpoint": 190,
+      "Next": {
+        "Day": "Tuesday",
+        "Time": 1000,
+        "DegreesC": 150
+      }
+    }
+  ],
+  "OnOff": [
+    {
+      "id": 1,
+      "Name": "Truc ",
+      "Monday": [
+        -500,
+        1400,
+        -1500,
+        2300
+      ],
+      "Tuesday": [
+        -500,
+        1400,
+        -1500,
+        2300
+      ],
+      "Wednesday": [
+        -500,
+        1400,
+        -1500,
+        2300
+      ],
+      "Thursday": [
+        -500,
+        1400,
+        -1500,
+        2300
+      ],
+      "Friday": [
+        -500,
+        1400,
+        -1500,
+        2300
+      ],
+      "Saturday": [
+        -500,
+        1400,
+        -1500,
+        2300
+      ],
+      "Sunday": [
+        -500,
+        1400,
+        -1500,
+        2300
+      ],
+      "CurrentState": "Off",
+      "Next": {
+        "Day": "Tuesday",
+        "Time": 1400,
+        "State": "On"
+      }
+    }
+  ],
+  "Level": [
+    {
+      "id": 1,
+      "Type": "Shutters",
+      "Name": "Volets",
+      "Monday": {
+        "Time": [
+          3000,
+          4000
+        ],
+        "Level": [
+          100,
+          0
+        ]
+      },
+      "Tuesday": {
+        "Time": [
+          3000,
+          4000
+        ],
+        "Level": [
+          100,
+          0
+        ]
+      },
+      "Wednesday": {
+        "Time": [
+          3000,
+          4000
+        ],
+        "Level": [
+          100,
+          0
+        ]
+      },
+      "Thursday": {
+        "Time": [
+          3000,
+          4000
+        ],
+        "Level": [
+          100,
+          0
+        ]
+      },
+      "Friday": {
+        "Time": [
+          3000,
+          4000
+        ],
+        "Level": [
+          100,
+          0
+        ]
+      },
+      "Saturday": {
+        "Time": [
+          3000,
+          4000
+        ],
+        "Level": [
+          100,
+          0
+        ]
+      },
+      "Sunday": {
+        "Time": [
+          3000,
+          4000
+        ],
+        "Level": [
+          100,
+          0
+        ]
+      },
+      "CurrentLevel": 100,
+      "Next": {
+        "Day": "Tuesday",
+        "Time": 1830,
+        "Level": 0
+      }
+    },
+    {
+      "id": 2,
+      "Type": "Lighting",
+      "Name": "Testproglight",
+      "Monday": {
+        "Time": [],
+        "Level": []
+      },
+      "Tuesday": {
+        "Time": [
+          1500,
+          1510,
+          3000,
+          4000
+        ],
+        "Level": [
+          40,
+          0,
+          0,
+          50
+        ]
+      },
+      "Wednesday": {
+        "Time": [],
+        "Level": []
+      },
+      "Thursday": {
+        "Time": [
+          730,
+          2130,
+          3000,
+          4000
+        ],
+        "Level": [
+          2,
+          0,
+          0,
+          35
+        ]
+      },
+      "Friday": {
+        "Time": [
+          700,
+          900,
+          1800,
+          2130
+        ],
+        "Level": [
+          25,
+          0,
+          30,
+          0
+        ]
+      },
+      "Saturday": {
+        "Time": [],
+        "Level": []
+      },
+      "Sunday": {
+        "Time": [
+          730,
+          2130,
+          3000,
+          4000
+        ],
+        "Level": [
+          2,
+          0,
+          0,
+          35
+        ]
+      },
+      "CurrentLevel": 0,
+      "Next": {
+        "Day": "Tuesday",
+        "Time": 1500,
+        "Level": 40
+      }
+    },
+    {
+      "id": 3,
+      "Type": "Shutters",
+      "Name": "Test"
+    }
+  ]
+}

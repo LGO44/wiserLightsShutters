@@ -46,5 +46,3 @@ null
 #### not implemented
 The commands for lights and shutters are not operationnal.
 		
-
-	
