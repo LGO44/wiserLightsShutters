@@ -32,9 +32,11 @@ def override_level(self) -> int:
 ### Issue
 When I try to save the schedule of a light or a shutter the result is always:
 for example from the HA developpment tools, the file lustre_cuisine.yaml 
+![image](https://user-images.githubusercontent.com/95585425/154519330-74d6e14c-ff59-4ebd-beb2-0c535baca9e5.png)
 
 null
 ...
+![image](https://user-images.githubusercontent.com/95585425/154519825-93b86fc2-87a6-454a-8118-23ddc11b8abf.png)
  
  The json schedule file shows 3 types of schedules : 
 	"Heaating"		rooms
