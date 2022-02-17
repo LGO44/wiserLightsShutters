@@ -250,6 +250,12 @@ class WiserShutter(CoverEntity):
         return self._shutter.target_scheduled_lift
 
     @property
+    def lift_open_time(self):
+        """Return target lift."""
+        return self._shutter.drive_config.get("LiftOpenTime")
+         
+
+    @property
     def extra_state_attributes(self):
         """Return state attributes."""
         # Generic attributes
@@ -270,14 +276,14 @@ class WiserShutter(CoverEntity):
             attrs["current_state"] = "Middle" 
         attrs["current_lift"] = self._shutter.current_lift
         attrs["manual_lift"] = self._shutter.manual_lift
-        #attrs["target_lift"] = self._shutter.target_lift
+        attrs["target_lift"] = self._shutter.target_lift
         attrs["scheduled_lift"] = self._shutter.scheduled_lift
         attrs["lift_movement"] = self._shutter.lift_movement
         attrs["is_open"] = self._shutter.is_open
         attrs["is_closed"] = self._shutter.is_closed
-        #attrs["lift_open_time"] = self._shutter.lift_open_time
-        #attrs["lift_close_time"] = self._shutter.lift_close_time
-        #attrs["schedule_id"] = self._shutter.schedule_id
+        attrs["lift_open_time"] = self._shutter.drive_config.open_time
+        attrs["lift_close_time"] = self._shutter.drive_config.close_time
+        attrs["schedule_id"] = self._shutter.schedule_id
         
         if  self._data.wiserhub.rooms.get_by_id(self._shutter.room_id) is not None:
             attrs["room"] = self._data.wiserhub.rooms.get_by_id(self._shutter.room_id).name
@@ -350,21 +356,28 @@ class WiserShutter(CoverEntity):
     @callback
     async def async_get_schedule(self, filename: str) -> None:
         try:
-            _LOGGER.info(f"Saving {self._shutter.name} schedule to file {filename}")
-            await self.hass.async_add_executor_job(
-                self._shutter.schedule.save_schedule_to_yaml_file, filename
-            )
+            if self._shutter.schedule:
+                _LOGGER.info(f"Saving {self._shutter.name} schedule to file {filename}")
+                await self.hass.async_add_executor_job(
+                    self._shutter.schedule.save_schedule_to_yaml_file, filename
+                    )
+            else:
+                _LOGGER.warning(f"{self._shutter.name} has no schedule to save")	
         except:
             _LOGGER.error(f"Saving {self._shutter.name} schedule to file {filename}")
 
     @callback
     async def async_set_schedule(self, filename: str) -> None:
         try:
-            _LOGGER.info(f"Setting {self._shutter.name} schedule from file {filename}")
-            await self.hass.async_add_executor_job(
-                self._shutter.schedule.set_schedule_from_yaml_file, filename
-            )
-            await self.async_force_update()
+            if self._shutter.schedule:
+                _LOGGER.info(f"Setting {self._shutter.name} schedule from file {filename}")
+                await self.hass.async_add_executor_job(
+                    self._shutter.schedule.set_schedule_from_yaml_file, filename
+                    )
+                await self.async_force_update()
+            else:
+                _LOGGER.warning(f"{self._shutter.name} has no schedule to assign")
+				
         except:
             _LOGGER.error(f"Error setting {self._shutter.name} schedule from file {filename}")
 
@@ -372,12 +385,15 @@ class WiserShutter(CoverEntity):
     async def async_copy_schedule(self, to_entity_id)-> None:
         to_shutter_name = to_entity_id.replace("shutter.wiser_","").replace("_"," ")
         try:
-            # Add Check that to_entity is of same type as from_entity
-            _LOGGER.info(f"Copying schedule from {self._shutter.name} to {to_shutter_name.title()}")
-            await self.hass.async_add_executor_job(
+            if self._shutter.schedule:
+                # Add Check that to_entity is of same type as from_entity
+                _LOGGER.info(f"Copying schedule from {self._shutter.name} to {to_shutter_name.title()}")
+                await self.hass.async_add_executor_job(
                     self._shutter.schedule.copy_schedule, self._data.wiserhub.shutters.get_by_name(to_room_name).schedule.id
-                )
-            await self.async_force_update()
+                    )
+                await self.async_force_update()
+            else:
+                _LOGGER.warning(f"{self._shutter.name} has no schedule to copy")	
         except:
             _LOGGER.error(f"Error copying schedule from {self._shutter.name} to {to_shutter_name}")
 

@@ -1,5 +1,5 @@
 """
-Climate Platform Device for Wiser Rooms.
+Lights Platform Device for Wiser Rooms.
 
 https://github.com/asantaga/wiserHomeAssistantPlatform
 Angelosantagata@gmail.com
@@ -158,7 +158,6 @@ class WiserLight(LightEntity):
 
     async def async_update(self):
         """Async update method."""
-																  
         self._light = self._data.wiserhub.devices.lights.get_by_id(self._light_id)
       
     @property
@@ -201,30 +200,19 @@ class WiserLight(LightEntity):
     def output_range_maximum(self):
         """Return max level from data."""
         """ should be self._light.output_range_maximum to be implemented in WiserHeatAPIv2   """
-        return 254
-																					  
-											 
-															  
-																  
-																		
-			 
+        return self._light.output_range.max
 
     @property
     def output_range_minimum(self):
         """Return min level from data."""
         """ should be self._light.output_range.minimum to be implemented in WiserHeatAPIv2   """
-        return self._light.output_range_minimum
+        return self._light.output_range.min
 
     @property
     def name(self):
         """Return Name of device."""
         return get_device_name(self._data, self._light_id, "device")
 
-							 
-									 
-																									
-			 
-		 
 
     @property
     def should_poll(self):
@@ -232,10 +220,8 @@ class WiserLight(LightEntity):
         return True
 
     @property
-											
     def mode(self):
         return self._ligth.mode   
-										
 
     
     @property
@@ -309,12 +295,16 @@ class WiserLight(LightEntity):
         attrs["current_percentage"] = self._light.current_percentage
         attrs["current_level"] = self._light.current_level
         attrs["is_dimmable"] = self._light.is_dimmable
+        attrs["output_range_min"] = self._light.output_range.min
+        attrs["output_range_max"] = self._light.output_range.max
+        
         if  self._data.wiserhub.rooms.get_by_id(self._light.room_id) is not None:
             attrs["room"] = self._data.wiserhub.rooms.get_by_id(self._light.room_id).name
         else:
             attrs["room"] = "Unassigned"     
-        #attrs["target_state"] = self._light.target_state
-        #attrs["target_percentage"] = self._light.target_percentage
+        attrs["target_state"] = self._light.target_state
+        attrs["target_percentage"] = self._light.target_percentage
+        attrs["schedule_id"] = self._light.schedule_id
         if self._light.schedule:
             attrs["next_schedule_change"] = str(self._light.schedule.next.time)
             attrs["next_schedule_percentage"] = self._light.schedule.next.setting    
@@ -390,21 +380,27 @@ class WiserLight(LightEntity):
     @callback
     async def async_get_schedule(self, filename: str) -> None:
         try:
-            _LOGGER.info(f"Saving {self._light.name} schedule to file {filename}")
-            await self.hass.async_add_executor_job(
-                self._light.schedule.save_schedule_to_yaml_file, filename
-            )
+            if self._light.schedule:
+                _LOGGER.info(f"Saving {self._light.name} schedule to file {filename}")
+                await self.hass.async_add_executor_job(
+                    self._light.schedule.save_schedule_to_yaml_file, filename
+                )
+            else:
+                _LOGGER.warning(f"{self._light.name} has no schedule to save")
         except:
             _LOGGER.error(f"Saving {self._light.name} schedule to file {filename}")
 
     @callback
     async def async_set_schedule(self, filename: str) -> None:
         try:
-            _LOGGER.info(f"Setting {self._light.name} schedule from file {filename}")
-            await self.hass.async_add_executor_job(
-                self._light.schedule.set_schedule_from_yaml_file, filename
-            )
-            await self.async_force_update()
+            if self._light.schedule:
+                _LOGGER.info(f"Setting {self._light.name} schedule from file {filename}")
+                await self.hass.async_add_executor_job(
+                    self._light.schedule.set_schedule_from_yaml_file, filename
+                )
+                await self.async_force_update()
+            else:
+                _LOGGER.warning(f"{self._light.name} has no schedule to assign")
         except:
             _LOGGER.error(f"Error setting {self._light.name} schedule from file {filename}")
 
@@ -412,12 +408,16 @@ class WiserLight(LightEntity):
     async def async_copy_schedule(self, to_entity_id)-> None:
         to_light_name = to_entity_id.replace("light.wiser_","").replace("_"," ")
         try:
-            # Add Check that to_entity is of same type as from_entity
-            _LOGGER.info(f"Copying schedule from {self._light.name} to {to_light_name.title()}")
-            await self.hass.async_add_executor_job(
+            if self._light.schedule:
+                # Add Check that to_entity is of same type as from_entity
+                _LOGGER.info(f"Copying schedule from {self._light.name} to {to_light_name.title()}")
+                await self.hass.async_add_executor_job(
                     self._light.schedule.copy_schedule, self._data.wiserhub.lights.get_by_name(to_light_name).schedule.id
                 )
-            await self.async_force_update()
+                await self.async_force_update()
+            else:
+                _LOGGER.warning(f"{self._light.name} has no schedule to copy")
+                
         except:
             _LOGGER.error(f"Error copying schedule from {self._light.name} to {to_light_name}")
 
