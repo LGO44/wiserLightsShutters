@@ -14,10 +14,12 @@ import voluptuous as vol
 from homeassistant.components.light import (
     ATTR_BRIGHTNESS,
     SUPPORT_BRIGHTNESS,
+    SUPPORT_BRIGHTNESS_PCT,
     ATTR_BRIGHTNESS_PCT,
     ATTR_SUPPORTED_COLOR_MODES,
     SUPPORT_TRANSITION,
     COLOR_MODES_BRIGHTNESS,
+    brightness_supported,
     LightEntity,
 )
 from homeassistant.const import ATTR_ENTITY_ID, ATTR_TEMPERATURE, TEMP_CELSIUS
@@ -43,7 +45,7 @@ from .helpers import get_device_name, get_identifier, get_room_name, get_unique_
 import logging
 
 MAX_BRIGHTNESS = 255
-COLOR_MODES_BRIGHTNESS = "brightness"
+#COLOR_MODES_BRIGHTNESS = "brightness"
 MANUFACTURER='Schneider Electric'
 
 _LOGGER = logging.getLogger(__name__)
@@ -59,36 +61,27 @@ STATUS_AWAY_BOOST = "Away Boost"
 STATUS_AWAY = "Away Mode"
 STATUS_OVERRIDE = "Override"
 
+LIGHT_MODE_ON= "Manual"
+LIGHT_MODE_AUTO= "Auto"
 
-WISER_PRESET_TO_HASS = {
-    "FromAwayMode": STATUS_AWAY,
-    "FromManualMode": None,
-    "FromSchedule": None,
-}
-
-WISER_PRESETS = {
-    "Advance Schedule": 0,
-    "Cancel Overrides": 0
-}
 
 #WISER_PRESETS.update(WISER_BOOST_PRESETS)
 
-"""
+
 LIGHT_MODE_WISER_TO_HASS = {
         "Auto": LIGHT_MODE_AUTO,
-        "Manual": LIGHT_MODE_HEAT,
-        "Off": LIGHT_MODE_OFF,
+        "Manual": LIGHT_MODE_ON,
+        
 }
-"""
-"""
+
+
 LIGHT_MODE_HASS_TO_WISER = {
     LIGHT_MODE_AUTO: "Auto",
-    LIGHT_MODE_HEAT: "Manual",
-    LIGHT_MODE_OFF: "Off",
-}
-"""
+    LIGHT_MODE_ON: "Manual",
+}  
 
-SUPPORT_FLAGS = SUPPORT_BRIGHTNESS | SUPPORT_TRANSITION
+
+SUPPORT_FLAGS = SUPPORT_BRIGHTNESS | SUPPORT_BRIGHTNESS_PCT #| SUPPORT_TRANSITION
 
 
 
@@ -111,8 +104,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 
         # Setup services
         platform = entity_platform.async_get_current_platform()
-
-    
+     
         platform.async_register_entity_service(
             WISER_SERVICES["SERVICE_GET_LIGHT_SCHEDULE"],
             {
@@ -147,8 +139,8 @@ class WiserLight(LightEntity):
         self._light_id = light_id
         self._light = self._data.wiserhub.devices.lights.get_by_id(self._light_id)
         self._name = self._light.name
-#        self._is_one = self._is_on
-#        self._light_modes_list = [modes for modes in LIGHT_MODE_HASS_TO_WISER.keys()]
+        self._light_modes_list = [modes for modes in LIGHT_MODE_HASS_TO_WISER.keys()]
+        
 
         _LOGGER.info(f"{self._data.wiserhub.system.name} {self.name} init")
 
@@ -173,7 +165,7 @@ class WiserLight(LightEntity):
                 "name": get_device_name(self._data, self._light_id,"light"),
                 "identifiers": {(DOMAIN, get_identifier(self._data, self._light_id,"light"))},
                 "manufacturer": MANUFACTURER,
-                "model": "NHPDimmer",  # get_device_name(self._data, self._light_id,"light"),`
+                "model":  self._light.product_model,
                 "via_device": (DOMAIN, self._data.wiserhub.system.name),
             }
 
@@ -227,10 +219,6 @@ class WiserLight(LightEntity):
     @property
     def is_on(self):
         return True if self._light.current_state=="On" else "Off"
-    """ 
-    @property
-    def state(self):
-        return self._ligth.current_state   """
       
          
     @property
@@ -262,116 +250,156 @@ class WiserLight(LightEntity):
     def away_action(self):
         """Return target percentage."""
         return self._light.away_action
-    """        
+       
+    @property
+    def light_mode(self):
+        """Return the list of available operation modes."""
+        return self._light_mode
+
     @property
     def light_modes(self):
-        """"""Return the list of available operation modes.""" """
+        """Return the list of available operation modes."""
         return self._light_modes_list
-
+   
     def set_light_mode(self, light_mode):
-        """ """Set new operation mode."""  """
+        """Set new operation mode."""  
         _LOGGER.debug(
             f"Setting LIGHT mode to {light_mode} for {self._light.name}"
         )
         try:
             self._light.mode = LIGHT_MODE_HASS_TO_WISER[light_mode]
+            pass
         except KeyError:
             _LOGGER.error(f"Invalid LIGHT mode.  Options are {self.light_modes}")
         self.hass.async_create_task(
             self.async_force_update()
         )
         return True
-    """   
+     
 
     @property
     def extra_state_attributes(self):
         """Return state attributes."""
         # Generic attributes
         attrs = super().state_attributes
-        attrs["name"] = self._light.name
-        attrs["mode"] = self._light.mode
-        attrs["current_state"] = self._light.current_state
-        attrs["control_source"] = self._light.control_source
-        attrs["current_percentage"] = self._light.current_percentage
-        attrs["current_level"] = self._light.current_level
-        attrs["is_dimmable"] = self._light.is_dimmable
-        attrs["output_range_min"] = self._light.output_range.min
-        attrs["output_range_max"] = self._light.output_range.max
-        
+        # Light Identification
+        attrs["name"] = self._light.name      
+        attrs["model"] = self._light.model
+        attrs["product_type"] = self._light.product_type
+        attrs["product_identifier"] = self._light.product_identifier
+        #attrs["Vendor"] = MANUFACTURER
+        attrs["product_model"] = self._light.product_model
+        attrs["serial_number"] = self._light.serial_number
+        attrs["firmware"] = self._light.firmware_version
+        # Room
         if  self._data.wiserhub.rooms.get_by_id(self._light.room_id) is not None:
             attrs["room"] = self._data.wiserhub.rooms.get_by_id(self._light.room_id).name
         else:
-            attrs["room"] = "Unassigned"     
-        attrs["target_state"] = self._light.target_state
+            attrs["room"] = "Unassigned" 
+        # Settings
+        attrs["mode"] = self._light.mode
+        attrs["away_mode_action"] = self._light.away_mode_action 
+        attrs["is_dimmable"] = self._light.is_dimmable
+        attrs["output_range_min"] = self._light.output_range.min
+        attrs["output_range_max"] = self._light.output_range.max
+        # Command state
+        attrs["control_source"] = self._light.control_source
+        # Status
+        attrs["current_state"] = self._light.current_state
+        attrs["current_percentage"] = self._light.current_percentage
+        attrs["current_level"] = self._light.current_level
         attrs["target_percentage"] = self._light.target_percentage
+        attrs["target_state"] = self._light.target_state
+        attrs["manual_level"] = self._light.manual_level
+        attrs["override_level"] = self._light.override_level
+        # Schedule
         attrs["schedule_id"] = self._light.schedule_id
         if self._light.schedule:
+            attrs["next_day_change"] = str(self._light.schedule.next.day)
             attrs["next_schedule_change"] = str(self._light.schedule.next.time)
             attrs["next_schedule_percentage"] = self._light.schedule.next.setting    
         return attrs
 
     @property
     def brightness(self):
-        """Return current temp from data."""
+        """Return current brightness from data."""
         return self._light.current_level
         
-    async def async_set_brightness(self, **kwargs):
-        """Set new target temperatures."""
-        brightness = kwargs.get(ATTR_BRIGHTNESS)
+    async def async_set_light_brightness(self, **kwargs):
+        """Set new target level."""
+        if ATTR_BRIGHTNESS in kwargs:
+            #brightness = int(kwargs.get(ATTR_BRIGHTNESS))
+            brightness = int(kwargs[ATTR_BRIGHTNESS])
+            _LOGGER.debug(f" Brightness {self.name} = {brightness}")
+        else: 
+            brightness = self.brightness
        
-        if brightness is  not None:
-           return False
+        if brightness is not None:
+           #return False
 
-#        if self._data.setpoint_mode == "boost":
-#            _LOGGER.debug(f"Setting percentage for {self.name} to {target_percentage} using boost")
-#            await self.hass.async_add_executor_job(
-#                self._room.set_target_percentage, target_percentage, self._data.target_percentage
-#            )
-#          pass    
-        else:
-            _LOGGER.debug(f"Setting percentage for {self.name} to {target_percentage}")
+            _LOGGER.debug(f"Setting percentage for {self.name} to {brightness} ")
             await self.hass.async_add_executor_job(
-                self._light.set_target_percentage, brightness
+                self._light.current_percentage, brightness
+           )
+            pass    
+        else:
+            _LOGGER.debug(f"Setting percentage for {self.name} to {brightness}")
+            await self.hass.async_add_executor_job(
+                self._light.turn_on
             )
 #          pass
         await self.async_force_update()
         return True
 
 
+#    async def async_turn_on1(self, **kwargs):
+#         """Turn light on."""
+        
+#        if ATTR_BRIGHTNESS in kwargs:
+#            brightness = int(kwargs[ATTR_BRIGHTNESS])
+#        else:
+#            brightness = self.brightness
+#        if brightness is not None:                     
+#            # Below functions need adding to api first
+#            
+#            await self.hass.async_add_executor_job(
+#                setattr, self._light, "brightness", brightness
+#            )
+#            """
+#            
+#            await self.hass.async_add_executor_job(
+#                setattr, self._light, "brightness", brightness
+#            )
+#            pass
+#        else:
+#            
+#            await self.hass.async_add_executor_job(
+#                self._light.turn_on
+#            )
+#            """
+#            await self.hass.async_add_executor_job(
+#                self._light.turn_on
+#            )
+#            pass
+#        await self.async_force_update()
+#        return True
+
     async def async_turn_on(self, **kwargs):
-        """Turn light on."""
-        if ATTR_BRIGHTNESS in kwargs:
-            brightness = int(kwargs[ATTR_BRIGHTNESS])
-        else:
-            brightness = self.brightness
-        if brightness is not None:
-            # Below functions need adding to api first
-            """
-            await self.hass.async_add_executor_job(
-                setattr, self._light, "brightness", brightness
-            )
-            """
-            pass
-        else:
-            """
-            await self.hass.async_add_executor_job(
-                self._light.turn_on
-            )
-            """
-            pass
+        """Turn light off."""
+         
+        await self.hass.async_add_executor_job(
+            self._light.turn_on
+        )
         await self.async_force_update()
         return True
-
-
+    
         
     async def async_turn_off(self, **kwargs):
         """Turn light off."""
-        # Below function needs adding to api first
-        """
+ 
         await self.hass.async_add_executor_job(
             self._light.turn_off
         )
-        """
         await self.async_force_update()
         return True
     

@@ -47,4 +47,15 @@ null
 The commands for lights and shutters are not operationnal.
 		
 
+###WiserHeatAPIv2 base on V0.0.21
+### 0.0.21.1
+- Added ProductIdentifier and ProductModel for device
+- Added properties: manual Level and override level to control lights
+- Added property available_modes to lights and shutters collection
+
+### 0.0.21.2
+- Added ProductIdentifier and ProductModel for device
+- Added property : scheduled percentage to control lights
+- Added properties : demand type, comfort mode score, displayed setpoint, 
+                 heating rate, heating type, control direction, to room
 	

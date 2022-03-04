@@ -774,22 +774,26 @@ class WiserShutterSwitch(WiserSwitch):
             #attrs["schedule_id"] = self._shutter.schedule_id
         return attrs
 
-    async def async_turn_on(self, **kwargs):
+    #async def async_turn_on(self, **kwargs):
+    async def async_open(self, **kwargs):
         """Turn the device on."""
         """ await self.hass.async_add_executor_job(
             self._light.turn_on  """
         await self.hass.async_add_executor_job(
-            setattr, self._shutter, "current_lift", "On"    
+            #setattr, self._shutter, "current_lift", "On" 
+            setattr, self._shutter, "current_lift", 100  
         )
         await self.async_force_update()
         return True
 
-    async def async_turn_off(self, **kwargs):
+    #async def async_turn_off(self, **kwargs):
+    async def async_close(self, **kwargs):
         """Turn the device off."""
         """await self.hass.async_add_executor_job(
             self._light.turn_off                    """
         await self.hass.async_add_executor_job(
-            setattr, self._shutter, "current_lift", "Off"    
+            #setattr, self._shutter, "current_lift", "Off" 
+            setattr, self._shutter, "current_lift", 0    
   
         )
         await self.async_force_update()

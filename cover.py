@@ -59,6 +59,8 @@ ATTR_TEMPERATURE_DELTA = "temperature_delta"
 STATUS_AWAY = "Away Mode"
 STATUS_AWAY_BOOST = "Away Boost"
 
+SHUTTER_MODE_ON= "Manual"
+SHUTTER_MODE_AUTO= "Auto"
 
 WISER_PRESET_TO_HASS = {
     "FromAwayMode": STATUS_AWAY,
@@ -87,7 +89,17 @@ SHUTTER_MODE_HASS_TO_WISER = {
     shutter_MODE_OFF: "Off",
 }
 """
+SHUTTER_MODE_WISER_TO_HASS = {
+        "Auto": SHUTTER_MODE_AUTO,
+        "Manual": SHUTTER_MODE_ON,
+        
+}
 
+
+SHUTTER_MODE_HASS_TO_WISER = {
+    SHUTTER_MODE_AUTO: "Auto",
+    SHUTTER_MODE_ON: "Manual",
+}  
 SUPPORT_FLAGS =  SUPPORT_OPEN | SUPPORT_CLOSE | SUPPORT_SET_POSITION | SUPPORT_STOP
 #| STATE_CLOSED | STATE_OPEN | STATE_CLOSING | STATE_OPENING,
 
@@ -148,10 +160,7 @@ class WiserShutter(CoverEntity):
         self._shutter_id = shutter_id
         self._shutter = self._data.wiserhub.devices.shutters.get_by_id(self._shutter_id)
         self._name = self._shutter.name
-        
-#        self.current_position = None
-#        self.position = self._shutter.scheduled_lift
-#        self._shutter_modes_list = [modes for modes in shutter_MODE_HASS_TO_WISER.keys()]
+        self._shutter_modes_list = [modes for modes in SHUTTER_MODE_HASS_TO_WISER.keys()]
 
         _LOGGER.info(f"{self._data.wiserhub.system.name} {self.name} init")
 
@@ -186,7 +195,7 @@ class WiserShutter(CoverEntity):
                 "name": get_device_name(self._data, self._shutter_id,"shutter"),
                 "identifiers": {(DOMAIN, get_identifier(self._data, self._shutter_id,"shutter"))},
                 "manufacturer": MANUFACTURER,
-                "model": "NHPB/SHUTTER/1",  # get_device_name(self._data, self._shutter_id,"shutter"),`
+                "model": self._shutter.product_model,
                 "via_device": (DOMAIN, self._data.wiserhub.system.name),
             }
 
@@ -231,7 +240,7 @@ class WiserShutter(CoverEntity):
             return "Closed"
         elif (self._shutter.is_open == False and self._shutter.is_closed == False):
             return "Middle"
-        #return True if self._shutter.is_open else 'OFF'
+        
          
     @property
     def shutter_unit(self):
@@ -260,12 +269,28 @@ class WiserShutter(CoverEntity):
         """Return state attributes."""
         # Generic attributes
         attrs = super().state_attributes
+        # Shutter Identification
         attrs["name"] = self._shutter.name
+        attrs["model"] = self._shutter.model
+        attrs["product_type"] = self._shutter.product_type
+        attrs["product_identifier"] = self._shutter.product_identifier
+        attrs["product_model"] = self._shutter.product_model
+        attrs["serial_number"] = self._shutter.serial_number
+        attrs["firmware"] = self._shutter.firmware_version
+        # Room
+        if  self._data.wiserhub.rooms.get_by_id(self._shutter.room_id) is not None:
+            attrs["room"] = self._data.wiserhub.rooms.get_by_id(self._shutter.room_id).name
+        else:
+            attrs["room"] = "Unassigned"     
+        # Settings
         attrs["shutter_id"] = self._shutter_id
-
+        attrs["away_mode_action"] = self._shutter.away_mode_action   
         attrs["mode"] = self._shutter.mode
-       
+        attrs["lift_open_time"] = self._shutter.drive_config.open_time
+        attrs["lift_close_time"] = self._shutter.drive_config.close_time
+        # Command state
         attrs["control_source"] = self._shutter.control_source
+        # Status
         attrs["is_open"] = self._shutter.is_open
         attrs["is_closed"] = self._shutter.is_closed
         if self._shutter.is_open :
@@ -274,23 +299,16 @@ class WiserShutter(CoverEntity):
             attrs["current_state"] ="Closed"
         elif (self._shutter.is_open == False and self._shutter.is_closed == False):
             attrs["current_state"] = "Middle" 
+        attrs["lift_movement"] = self._shutter.lift_movement
+        # Positions
         attrs["current_lift"] = self._shutter.current_lift
         attrs["manual_lift"] = self._shutter.manual_lift
         attrs["target_lift"] = self._shutter.target_lift
         attrs["scheduled_lift"] = self._shutter.scheduled_lift
-        attrs["lift_movement"] = self._shutter.lift_movement
-        attrs["is_open"] = self._shutter.is_open
-        attrs["is_closed"] = self._shutter.is_closed
-        attrs["lift_open_time"] = self._shutter.drive_config.open_time
-        attrs["lift_close_time"] = self._shutter.drive_config.close_time
-        attrs["schedule_id"] = self._shutter.schedule_id
-        
-        if  self._data.wiserhub.rooms.get_by_id(self._shutter.room_id) is not None:
-            attrs["room"] = self._data.wiserhub.rooms.get_by_id(self._shutter.room_id).name
-        else:
-            attrs["room"] = "Unassigned"     
-        
+        # Schedule
+        attrs["schedule_id"] = self._shutter.schedule_id        
         if self._shutter.schedule:
+            attrs["next_day_change"] = str(self._shutter.schedule.next.day)
             attrs["next_schedule_change"] = str(self._shutter.schedule.next.time)
             attrs["next_schedule_state"] = self._shutter.schedule.next.setting    
             
@@ -305,24 +323,25 @@ class WiserShutter(CoverEntity):
 #            return False
 
 #            await self.hass.async_add_executor_job(
-#                self._shutter.set_cover_position, position, self._data._position
+#                self._shutter.current_lift, position, self._data._position
 #            )
           pass    
         else:
 #            _LOGGER.debug(f"Setting percentage for {self.name} to {target_percentage}")
 #            await self.hass.async_add_executor_job(
-#                self._shutter.set_cover_position,position, self._data._position
+#                self._shutter.current_lift,position, self._data._position
 #            )
           pass
         await self.async_force_update()
         return True
 
-    async def async_open_cover(self, **kwargs):
+    async def async_open1_cover(self, **kwargs):
         """Turn light on."""
         if ATTR_POSITION in kwargs:
             position = int(kwargs[ATTR_POSITION])
         else:
-            position = self.current_cover_position
+            position = self.current_lift
+            #position = self.current_lift
         if position is not None:
             # Below functions need adding to api first
             """
@@ -330,27 +349,49 @@ class WiserShutter(CoverEntity):
                 setattr, self._shutter, "current_cover_position", current_cover_position
             )
             """
+            await self.hass.async_add_executor_job(
+                setattr, self._shutter, "current_lift", position
+            )
             pass
         else:
-            """
+            
             await self.hass.async_add_executor_job(
-                self._shutter.open_cover
+                self._shutter.open
             )
-            """
             pass
         await self.async_force_update()
         return True
 
+
+    # added by LGO44 tested OK 2022 02 25
+
     async def async_close_cover(self, **kwargs):
         """Close shutter"""
-        # Below function needs adding to api first
-        """
         await self.hass.async_add_executor_job(
-            self._shutter.close_cover
-        )
-        """
+            self._shutter.close
+        )              
         await self.async_force_update()
         return True
+
+    async def async_open_cover(self, **kwargs):
+        """Close shutter"""
+        await self.hass.async_add_executor_job(
+            self._shutter.open
+        )
+                
+        await self.async_force_update()
+        return True
+
+    async def async_stop_cover(self, **kwargs):
+        """Stop shutter"""       
+        await self.hass.async_add_executor_job(
+            self._shutter.stop
+        )
+                
+        await self.async_force_update()
+        return True
+
+
 
 
     @callback

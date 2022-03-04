@@ -10,7 +10,7 @@ import logging
 from homeassistant.components.sensor import SensorDeviceClass, SensorStateClass, SensorEntity
 from homeassistant.const import ATTR_BATTERY_LEVEL, TEMP_CELSIUS, PERCENTAGE, POWER_WATT, ENERGY_KILO_WATT_HOUR
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
-from homeassistant.helpers.entity import Entity
+from homeassistant.helpers.entity import Entity, EntityCategory
 import voluptuous as vol
 
 from .const import (
@@ -80,16 +80,6 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 
         ])
 
-    # Add power sensors for HeatingActuators    
-    if data.wiserhub.devices.heating_actuators:
-        for heating_actuator in data.wiserhub.devices.heating_actuators.all: 
-            wiser_sensors.extend([
-                WiserHeatingActuatorPower(data, heating_actuator.id, sensor_type = "Power"),
-                WiserHeatingActuatorPower(data, heating_actuator.id, sensor_type = "Total Power")
-            ])  
-
-
-
     # Add power sensors for smartplugs
     if data.wiserhub.devices.smartplugs:
         for smartplug in data.wiserhub.devices.smartplugs.all:
@@ -108,6 +98,14 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
                 WiserLTSTempSensor(data, temp_device.id, sensor_type = "current_target_temp"),
                 WiserLTSDemandSensor(data, temp_device.id, "room")
             ])
+    # Add LTS sensors - for room Power and Energy for heating actuators
+    if data.wiserhub.devices.heating_actuators:
+        for heating_actuator in data.wiserhub.devices.heating_actuators.all: 
+            wiser_sensors.extend([
+                WiserLTSPowerSensor(data, heating_actuator.id, sensor_type = "Power"),
+                WiserLTSPowerSensor(data, heating_actuator.id, sensor_type = "Energy"),
+            ])  
+        
 
         # Add heating channels demand
         for channel in data.wiserhub.heating_channels.all:
@@ -341,11 +339,8 @@ class WiserDeviceSignalSensor(WiserSensor):
             attrs["temperature"] = self._data.wiserhub.devices.get_by_id(self._device_id).current_temperature
             
         """ Added by LGO44 to test the devises and their attribute   """
-        """ some attribute are in comment because the WiserHeatAPIv2 doesn't provide them """
 
         if self._sensor_type == "HeatingActuator":
-            attrs["instantaneous_demand"] = self._data.wiserhub.devices.get_by_id(self._device_id).instantaneous_power 
-            attrs["current_summation_delivered"] = self._data.wiserhub.devices.get_by_id(self._device_id).delivered_power / 1000
             attrs["sensor_type"] = "Heating"
             attrs["current_target_temperature"] = self._data.wiserhub.devices.get_by_id(self._device_id).current_target_temperature
             attrs["current_temperature"] = self._data.wiserhub.devices.get_by_id(self._device_id).current_temperature
@@ -354,7 +349,6 @@ class WiserDeviceSignalSensor(WiserSensor):
         if self._sensor_type in ["Shutter","Light", "DimmableLight"]:
             attrs["name"] = self._data.wiserhub.devices.get_by_id(self._device_id).name
             attrs["mode"] = self._data.wiserhub.devices.get_by_id(self._device_id).mode
-            """attrs["away_action"] = self._data.wiserhub.devices.get_by_id(self._device_id).away_action   """
             attrs["mode"] = self._data.wiserhub.devices.get_by_id(self._device_id).mode   
             attrs["control_source"] = self._data.wiserhub.devices.get_by_id(self._device_id).control_source
             attrs["room_id"] = self._data.wiserhub.devices.get_by_id(self._device_id).room_id
@@ -363,23 +357,15 @@ class WiserDeviceSignalSensor(WiserSensor):
         if self._sensor_type == "Shutter":
             attrs["sensor_type"] = "Shutter"
             attrs["shutter_id"] = self._data.wiserhub.devices.get_by_id(self._device_id).shutter_id 
-            """attrs["scheduledid"] = self._data.wiserhub.devices.get_by_id(self._device_id).schedule_id          """
-            """attrs["lift_close_time"] = self._data.wiserhub.devices.get_by_id(self._device_id).lift_close_time  """
-            """attrs["lift_open_time"] = self._data.wiserhub.devices.get_by_id(self._device_id).lift_open_time    """
             attrs["manual_lift"] = self._data.wiserhub.devices.get_by_id(self._device_id).manual_lift
             attrs["current_lift"] = self._data.wiserhub.devices.get_by_id(self._device_id).current_lift
-            """attrs["device_lock_enable"] = self._data.wiserhub.devices.get_by_id(self._device_id).device_lock_enable    """
-            """attrs["indentify_active"] = self._data.wiserhub.devices.get_by_id(self._device_id).indentify_active        """
             attrs["identify"] = self._data.wiserhub.devices.get_by_id(self._device_id).identify
-            """attrs["away_action"] = self._data.wiserhub.devices.get_by_id(self._device_id).away_action                  """
             
             attrs["scheduled_lift"] = self._data.wiserhub.devices.get_by_id(self._device_id).scheduled_lift
             attrs["lift_movement"] = self._data.wiserhub.devices.get_by_id(self._device_id).lift_movement
             attrs["is_open"] = self._data.wiserhub.devices.get_by_id(self._device_id).is_open
-            attrs["is_closed"] = self._data.wiserhub.devices.get_by_id(self._device_id).is_closed 
-           
-            
-
+            attrs["is_closed"] = self._data.wiserhub.devices.get_by_id(self._device_id).is_closed           
+        
         return attrs
 
 
@@ -662,8 +648,8 @@ class WiserLTSTempSensor(WiserSensor):
 
     @property
     def entity_category(self):
-        return 'diagnostic'
-
+        #return 'diagnostic'
+        return EntityCategory.DIAGNOSTIC
 
 class WiserLTSDemandSensor(WiserSensor):
     """Sensor for long term stats for room temp and target temp"""
@@ -730,7 +716,8 @@ class WiserLTSDemandSensor(WiserSensor):
 
     @property
     def entity_category(self):
-        return 'diagnostic'
+        #return 'diagnostic'
+        return EntityCategory.DIAGNOSTIC
 
 
         
@@ -738,65 +725,112 @@ class WiserLTSDemandSensor(WiserSensor):
 """ based on WiserSmartplug... """
         
 
-class WiserHeatingActuatorPower(WiserSensor):
-    """Sensor for the power of a Wiser Heating Actuators."""
 
-    def __init__(self, data, device_id, sensor_type=""):
+class WiserLTSPowerSensor(WiserSensor):
+
+    """Sensor for long term stats for heating actuators power and energy"""
+
+    def __init__(self, data, id, sensor_type=""):
+
         """Initialise the operation mode sensor."""
-        super().__init__(data, device_id, sensor_type)
-        self._device = data.wiserhub.devices.heating_actuators.get_by_id(device_id)
 
+        self._lts_sensor_type = sensor_type
+        
+        if sensor_type == "Power":
+            super().__init__(data, id, f"LTS Power {data.wiserhub.rooms.get_by_id(data.wiserhub.devices.get_by_id(id).room_id).name}")
+
+        else:
+            super().__init__(data, id, f"LTS Energy {data.wiserhub.rooms.get_by_id(data.wiserhub.devices.get_by_id(id).room_id).name}")
+
+        self._device = data.wiserhub.devices.heating_actuators.get_by_id(id)
 
     async def async_update(self):
+
         """Fetch new state data for the sensor."""
+
         await super().async_update()
-        self._device = self._data.wiserhub.devices.heating_actuators.get_by_id(self._device_id)
-        if self._sensor_type == "Power":
-            """self._state = self._device.instantaneous_power """
-            self._state = self._device.instantaneous_power
+
+        if self._lts_sensor_type == "Power":
+            self._state = self._data.wiserhub.devices.heating_actuators.get_by_id(self._device_id).instantaneous_power
+            
         else:
-            """self._state = round(self._device.delivered_power / 1000, 2)"""
-            self._state = round(self._device.delivered_power / 1000, 2)
+            self._state = round(self._data.wiserhub.devices.heating_actuators.get_by_id(self._device_id).delivered_power / 1000, 2)
+ 
+
 
     @property
-    def name(self):
-        """Return the name of the sensor."""
-        return f"{get_device_name(self._data, self._device_id)} {self._sensor_type}"
 
-    @property
-    def icon(self):
-        """Return icon."""
-        return "mdi:radiator" if self._device.instantaneous_power > 0 else "mdi:radiator-off"
-        
-    @property
     def device_info(self):
+
         """Return device specific attributes."""
+
         return {
-                "name": get_device_name(self._data, self._device_id),
-                "identifiers": {(DOMAIN, get_identifier(self._data, self._device_id))},
+                "name":  get_device_name(self._data, self._data.wiserhub.devices.get_by_id(self._device_id).room_id,"room"),
+                "identifiers": {(DOMAIN, get_identifier(self._data, self._data.wiserhub.devices.get_by_id(self._device_id).room_id,"room"))},
+
                 "manufacturer": MANUFACTURER,
+
+                "model": "Room",
+
+                "via_device": (DOMAIN, self._data.wiserhub.system.name),
+
             }
 
     @property
-    def device_class(self):
-        if self._sensor_type == "Power":
+
+    def icon(self):
+
+        """Return icon for sensor"""
+
+        if self._lts_sensor_type == "Power":
+
+            return "mdi:home-lightning-bolt" if self._data.wiserhub.devices.heating_actuators.get_by_id(self._device_id).instantaneous_power > 0 else "mdi:home-lightning-bolt-outline"
+
+        if self._lts_sensor_type == "Energy":
+
+            return "mdi:home-lightning-bolt"
+
+        return "mdi:home-lightning-bolt-outline"
+
+    @property
+
+    def device_class(self):      
+        if self._lts_sensor_type == "Power":
             return SensorDeviceClass.POWER
-        return SensorDeviceClass.ENERGY
+        else:
+            return SensorDeviceClass.ENERGY
 
     @property
+
     def state_class(self):
-        if self._sensor_type == "Power":
+        if self._lts_sensor_type == "Power":
+
             return SensorStateClass.MEASUREMENT
-        return SensorStateClass.TOTAL_INCREASING
+        else:    
+            return SensorStateClass.TOTAL_INCREASING
 
     @property
-    def native_value(self) -> float:
+
+    def native_value(self)-> float:
+
         """Return the state of the entity."""
+
         return self._state
 
     @property
-    def native_unit_of_measurement(self) -> str:
+
+    def native_unit_of_measurement(self) ->str:        
         """Return the unit this state is expressed in."""
-        if self._sensor_type == "Power":
+
+        if self._lts_sensor_type == "Power":
             return POWER_WATT
-        return ENERGY_KILO_WATT_HOUR
+        else:
+            return ENERGY_KILO_WATT_HOUR
+
+    @property
+
+    def entity_category(self):
+
+        #return 'diagnostic'        
+        return EntityCategory.DIAGNOSTIC
+   

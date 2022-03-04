@@ -67,10 +67,12 @@ WISER_SERVICES = {
     "SERVICE_SET_HOTWATER_MODE": "set_hotwater_mode", 
     "SERVICE_GET_LIGHT_SCHEDULE": "get_light_schedule",
     "SERVICE_SET_LIGHT_SCHEDULE": "set_light_schedule",
+    "SERVICE_SET_LIGHT_MODE": "set_light_mode",
     "SERVICE_COPY_LIGHT_SCHEDULE": "copy_light_schedule",
     "SERVICE_GET_SHUTTER_SCHEDULE": "get_shutter_schedule",
-    "SERVICE_SET_SHUTTER_SCHEDULE": "set_light_schedule",
+    "SERVICE_SET_SHUTTER_SCHEDULE": "set_shutter_schedule",
     "SERVICE_COPY_SHUTTER_SCHEDULE": "copy_shutter_schedule",
+    "SERVICE_SET_SHUTTER_MODE": "set_shutter_mode",
 
 }
 

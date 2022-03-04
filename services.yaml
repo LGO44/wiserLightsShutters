@@ -278,7 +278,7 @@ set_light_mode:
   target:
     entity:
       integration: wiser
-      domain: select
+      domain: light
   fields:
     mode:
       name: "Mode"
@@ -312,8 +312,7 @@ set_dimmable_light_percentage:
           max: 100.0
           step: 1.0
           unit_if_measurement: '%'
-          
-          
+                   
 
 get_shutter_schedule:
   name: Save Shutter Schedule to File
@@ -356,7 +355,7 @@ set_shutter_mode:
   target:
     entity:
       integration: wiser
-      domain: select
+      domain: shutter
   fields:
     mode:
       name: "Mode"
@@ -380,7 +379,7 @@ set_shutter_target_lift:
   fields:
     percentage:
       name: Percentage
-      description: Set the  target position for a shutter.
+      description: Set the target position for a shutter.
       example: 21.0
       default: 21.0
       required: false
