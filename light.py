@@ -14,11 +14,11 @@ import voluptuous as vol
 from homeassistant.components.light import (
     ATTR_BRIGHTNESS,
     SUPPORT_BRIGHTNESS,
-    SUPPORT_BRIGHTNESS_PCT,
-    ATTR_BRIGHTNESS_PCT,
+    #SUPPORT_BRIGHTNESS_PCT,
+    #ATTR_BRIGHTNESS_PCT,
     ATTR_SUPPORTED_COLOR_MODES,
     SUPPORT_TRANSITION,
-    COLOR_MODES_BRIGHTNESS,
+    #COLOR_MODES_BRIGHTNESS,
     brightness_supported,
     LightEntity,
 )
@@ -81,7 +81,7 @@ LIGHT_MODE_HASS_TO_WISER = {
 }  
 
 
-SUPPORT_FLAGS = SUPPORT_BRIGHTNESS | SUPPORT_BRIGHTNESS_PCT #| SUPPORT_TRANSITION
+SUPPORT_FLAGS = SUPPORT_BRIGHTNESS #| SUPPORT_BRIGHTNESS_PCT #| SUPPORT_TRANSITION
 
 
 
@@ -191,13 +191,11 @@ class WiserLight(LightEntity):
     @property
     def output_range_maximum(self):
         """Return max level from data."""
-        """ should be self._light.output_range_maximum to be implemented in WiserHeatAPIv2   """
         return self._light.output_range.max
 
     @property
     def output_range_minimum(self):
         """Return min level from data."""
-        """ should be self._light.output_range.minimum to be implemented in WiserHeatAPIv2   """
         return self._light.output_range.min
 
     @property
