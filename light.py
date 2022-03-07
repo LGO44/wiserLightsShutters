@@ -170,10 +170,10 @@ class WiserLight(LightEntity):
     def device_info(self):
         """Return device specific attributes."""
         return {
-                "name": get_device_name(self._data, self._light_id,"light"),
-                "identifiers": {(DOMAIN, get_identifier(self._data, self._light_id,"light"))},
+                "name": get_device_name(self._data, self._light_id),
+                "identifiers": {(DOMAIN, get_identifier(self._data, self._light_id))},
                 "manufacturer": MANUFACTURER,
-                "model": "NHPDimmer",  # get_device_name(self._data, self._light_id,"light"),`
+                "model": self._data.wiserhub.devices.get_by_id(self._light_id).model,
                 "via_device": (DOMAIN, self._data.wiserhub.system.name),
             }
 
