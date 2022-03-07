@@ -183,10 +183,10 @@ class WiserShutter(CoverEntity):
     def device_info(self):
         """Return device specific attributes."""
         return {
-                "name": get_device_name(self._data, self._shutter_id,"shutter"),
-                "identifiers": {(DOMAIN, get_identifier(self._data, self._shutter_id,"shutter"))},
+                "name": get_device_name(self._data, self._shutter_id),
+                "identifiers": {(DOMAIN, get_identifier(self._data, self._shutter_id))},
                 "manufacturer": MANUFACTURER,
-                "model": "NHPB/SHUTTER/1",  # get_device_name(self._data, self._shutter_id,"shutter"),`
+                "model": self._data.wiserhub.devices.get_by_id(self._shutter_id).model,
                 "via_device": (DOMAIN, self._data.wiserhub.system.name),
             }
 
@@ -194,7 +194,7 @@ class WiserShutter(CoverEntity):
     def icon(self):
         """Return icon to show if shutter is closed or Open."""
         
-        return "mdi:window_shutter" if self.is_closed else "mdi:window_shutter_open"
+        return "mdi:window-shutter" if self.is_closed else "mdi:window-shutter-open"
         
 
     @property
@@ -205,9 +205,8 @@ class WiserShutter(CoverEntity):
 
     @property
     def name(self):
-     #   Return Name of device.
-        return f"{get_device_name(self._data, self._shutter_id)}"   
-        """ {self._name}"""
+        """Return Name of device."""
+        return f"{get_device_name(self._data, self._shutter_id)} Control"   
 
 
     @property
